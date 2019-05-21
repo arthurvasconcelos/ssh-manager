@@ -2,32 +2,14 @@ import { MAINMENU_CLICK_ABOUT } from './constants';
 import { app, MenuItem, BrowserWindow } from 'electron';
 
 export default (win: BrowserWindow) => [
-    new MenuItem({
-        label: app.getName(),
-        submenu: [
-            {
-                role: 'about',
-                click() {
-                    win.webContents.send(MAINMENU_CLICK_ABOUT, [5, 6, 7]);
-                },
-            },
-            { type: 'separator' },
-            { role: 'services' },
-            { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideothers' },
-            { role: 'unhide' },
-            { type: 'separator' },
-            { role: 'quit' },
-        ],
-    }),
+    // { role: 'fileMenu' }
     new MenuItem({
         label: 'File',
         submenu: [
-            { role: 'close' },
             { role: 'quit' },
         ],
     }),
+    // { role: 'editMenu' }
     new MenuItem({
         label: 'Edit',
         submenu: [
@@ -37,22 +19,12 @@ export default (win: BrowserWindow) => [
             { role: 'cut' },
             { role: 'copy' },
             { role: 'paste' },
-            { role: 'pasteandmatchstyle' },
-            { role: 'delete' },
-            { role: 'selectall' },
-            { type: 'separator' },
-            {
-                label: 'Speech',
-                submenu: [
-                    { role: 'startspeaking' },
-                    { role: 'stopspeaking' }
-                ]
-            },
             { role: 'delete' },
             { type: 'separator' },
             { role: 'selectall' },
         ],
     }),
+    // { role: 'viewMenu' }
     new MenuItem({
         label: 'View',
         submenu: [
@@ -64,24 +36,28 @@ export default (win: BrowserWindow) => [
             { role: 'zoomin' },
             { role: 'zoomout' },
             { type: 'separator' },
-            { role: 'togglefullscreen' }
-        ]
+            { role: 'togglefullscreen' },
+        ],
     }),
+    // { role: 'windowMenu' }
     new MenuItem({
         label: 'Window',
         submenu: [
             { role: 'minimize' },
             { role: 'zoom' },
-            { type: 'separator' },
-            { role: 'front' },
-            { type: 'separator' },
-            { role: 'window' },
             { role: 'close' },
         ],
     }),
     new MenuItem({
         role: 'help',
         submenu: [
+            {
+                role: 'about',
+                click() {
+                    win.webContents.send(MAINMENU_CLICK_ABOUT, [5, 6, 7]);
+                },
+            },
+            { type: 'separator' },
             {
                 label: 'Learn More',
                 click() { require('electron').shell.openExternalSync('https://electronjs.org'); },

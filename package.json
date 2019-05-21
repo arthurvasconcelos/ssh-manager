@@ -1,5 +1,6 @@
 {
   "name": "ssh-manager",
+  "productName": "SSH Manager",
   "description": "Lorem ipsum",
   "version": "0.1.0",
   "homepage": "https://github.com/arthurvasconcelos/ssh-manager#readme",

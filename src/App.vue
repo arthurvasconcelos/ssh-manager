@@ -1,29 +1,96 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" fixed clipped app>
+      <v-list class="pt-0" dense>
+        <v-list-tile
+                v-for="item in items"
+                :key="item.title"
+                :to="item.to"
+        >
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar fixed app clipped-left>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+
+      <v-toolbar-title class="headline text-uppercase">
+        <span>SSH</span>&nbsp;
+        <span class="font-weight-light">Manager</span>
+      </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon :to="{ name: 'settings' }">
+        <v-icon>settings</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <v-container fluid :class="{ 'fill-height': $route.name === 'init' }">
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+
+<!--    <v-footer app></v-footer>-->
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script lang="ts">
+import electron from 'electron';
+import { MAINMENU_CLICK_ABOUT } from '@/constants';
+
+export default {
+  name: 'App',
+  data () {
+    return {
+      drawer: null,
+      items: [
+        {
+          title: 'Dashboard',
+          icon: 'dashboard',
+          to: { name: 'dashboard' }
+        },
+        {
+          title: 'Keys',
+          icon: 'vpn_key',
+          to: { name: 'keys' }
+        },
+        {
+          title: 'Known Hosts',
+          icon: 'settings_input_antenna',
+          to: { name: 'known-hosts' }
+        },
+        {
+          title: 'Hosts Config',
+          icon: 'dns',
+          to: { name: 'config' }
+        },
+      ],
     }
+  },
+  mounted() {
+    console.group('App Data');
+    console.log('App Name:', electron.remote.app.getName());
+    console.log('App Version:', electron.remote.app.getVersion());
+    console.log('Platform:', electron.remote.process.platform);
+    console.log('Chrome', electron.remote.process.versions.chrome);
+    console.log('Electron', electron.remote.process.versions.electron);
+    console.log('Node', electron.remote.process.versions.node);
+    console.log('V8', electron.remote.process.versions.v8);
+    console.groupEnd();
+
+    electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
+      console.log(event);
+      console.log(args);
+    });
   }
 }
-</style>
+</script>

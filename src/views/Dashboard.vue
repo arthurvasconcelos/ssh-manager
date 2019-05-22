@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="dashboard">
     <h1 class="display-3">Dashboard</h1>
 
     <v-divider></v-divider>
@@ -8,7 +8,7 @@
       <b>ERROR:</b> ssh folder was not found in path: {{ sshPath }}
     </v-alert>
 
-    <v-layout align-center justify-center pt-5 pb-3>
+    <v-layout wrap align-center justify-center pt-5 pb-3 mt-5>
       <v-flex sm6 xs12 md6 lg3 mx-3>
         <v-card>
           <div class="offset">
@@ -64,33 +64,30 @@
 </template>
 
 <script lang="ts">
+  import { PATH_TO_CONFIG_FILE, PATH_TO_KNOWN_HOSTS_FILE, PATH_TO_SSH_FOLDER } from "@/constants";
   import { Component, Vue } from "vue-property-decorator";
   import fs from 'fs';
-  import path from 'path';
-  import electron from 'electron';
 
   @Component({})
   export default class Dashboard extends Vue {
     public sshFolderNotFound = false;
-    public sshPath = path.resolve(electron.remote.app.getPath('home'), '.ssh');
+    public sshPath = PATH_TO_SSH_FOLDER;
     public keyCounter = 0;
     public trustedCounter = 0;
     public configCounter = 0;
 
     mounted() {
-      this.sshFolderNotFound = !fs.existsSync(this.sshPath);
+      this.sshFolderNotFound = !fs.existsSync(PATH_TO_SSH_FOLDER);
 
       if (!this.sshFolderNotFound) {
-        this.keyCounter = fs.readdirSync(this.sshPath).filter((file) => file.endsWith('.pub')).length * 2;
+        this.keyCounter = fs.readdirSync(PATH_TO_SSH_FOLDER).filter((file) => file.endsWith('.pub')).length * 2;
 
-        const knownHostsPath = path.resolve(this.sshPath, 'known_hosts');
-        if (fs.existsSync(knownHostsPath)) {
-          this.trustedCounter = fs.readFileSync(knownHostsPath).toString().split('\n').filter((line) => line).length;
+        if (fs.existsSync(PATH_TO_KNOWN_HOSTS_FILE)) {
+          this.trustedCounter = fs.readFileSync(PATH_TO_KNOWN_HOSTS_FILE).toString().split('\n').filter((line) => line).length;
         }
 
-        const configPath = path.resolve(this.sshPath, 'config');
-        if (fs.existsSync(configPath)) {
-          this.configCounter = fs.readFileSync(configPath).toString().split('\n').filter((line) => line.startsWith('Host')).length;
+        if (fs.existsSync(PATH_TO_CONFIG_FILE)) {
+          this.configCounter = fs.readFileSync(PATH_TO_CONFIG_FILE).toString().split('\n').filter((line) => line.startsWith('Host')).length;
         }
       }
     }

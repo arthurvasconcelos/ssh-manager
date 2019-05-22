@@ -10,12 +10,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue } from "vue-property-decorator";
 
-@Component({})
-export default class Init extends Vue {
-  public mounted() {
-    this.$router.push({ name: 'dashboard' });
+  @Component({})
+  export default class Init extends Vue {
+    public mounted() {
+      this.$router.push({ name: 'dashboard' });
+    }
   }
-}
 </script>

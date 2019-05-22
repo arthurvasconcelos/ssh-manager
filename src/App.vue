@@ -44,53 +44,53 @@
 </template>
 
 <script lang="ts">
-import electron from 'electron';
-import { MAINMENU_CLICK_ABOUT } from '@/constants';
+  import { MAINMENU_CLICK_ABOUT } from "@/constants";
+  import electron from "electron";
 
-export default {
-  name: 'App',
-  data () {
-    return {
-      drawer: null,
-      items: [
-        {
-          title: 'Dashboard',
-          icon: 'dashboard',
-          to: { name: 'dashboard' }
-        },
-        {
-          title: 'Keys',
-          icon: 'vpn_key',
-          to: { name: 'keys' }
-        },
-        {
-          title: 'Known Hosts',
-          icon: 'settings_input_antenna',
-          to: { name: 'known-hosts' }
-        },
-        {
-          title: 'Hosts Config',
-          icon: 'dns',
-          to: { name: 'config' }
-        },
-      ],
+  export default {
+    name: 'App',
+    data () {
+      return {
+        drawer: null,
+        items: [
+          {
+            title: 'Dashboard',
+            icon: 'dashboard',
+            to: { name: 'dashboard' }
+          },
+          {
+            title: 'Keys',
+            icon: 'vpn_key',
+            to: { name: 'keys' }
+          },
+          {
+            title: 'Known Hosts',
+            icon: 'settings_input_antenna',
+            to: { name: 'known-hosts' }
+          },
+          {
+            title: 'Hosts Config',
+            icon: 'dns',
+            to: { name: 'config' }
+          },
+        ],
+      }
+    },
+    mounted() {
+      console.group('App Data');
+      console.log('App Name:', electron.remote.app.getName());
+      console.log('App Version:', electron.remote.app.getVersion());
+      console.log('Platform:', electron.remote.process.platform);
+      console.log('Chrome', electron.remote.process.versions.chrome);
+      console.log('Electron', electron.remote.process.versions.electron);
+      console.log('Node', electron.remote.process.versions.node);
+      console.log('V8', electron.remote.process.versions.v8);
+      console.groupEnd();
+
+      electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
+        console.log(event);
+        console.log(args);
+      });
     }
-  },
-  mounted() {
-    console.group('App Data');
-    console.log('App Name:', electron.remote.app.getName());
-    console.log('App Version:', electron.remote.app.getVersion());
-    console.log('Platform:', electron.remote.process.platform);
-    console.log('Chrome', electron.remote.process.versions.chrome);
-    console.log('Electron', electron.remote.process.versions.electron);
-    console.log('Node', electron.remote.process.versions.node);
-    console.log('V8', electron.remote.process.versions.v8);
-    console.groupEnd();
-
-    electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
-      console.log(event);
-      console.log(args);
-    });
   }
-}
 </script>

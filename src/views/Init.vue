@@ -1,16 +1,16 @@
 <template>
   <v-layout align-center justify-center>
     <v-progress-circular
-            :size="70"
-            :width="7"
-            color="purple"
-            indeterminate
+      :size="70"
+      :width="7"
+      color="purple"
+      indeterminate
     ></v-progress-circular>
   </v-layout>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from "vue-property-decorator";
+  import { Component, Vue } from 'vue-property-decorator';
 
   @Component({})
   export default class Init extends Vue {

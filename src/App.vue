@@ -44,8 +44,8 @@
 </template>
 
 <script lang="ts">
-  import { MAINMENU_CLICK_ABOUT } from "@/constants";
-  import electron from "electron";
+  import { MAINMENU_CLICK_ABOUT } from '@/constants';
+  import electron from 'electron';
 
   export default {
     name: 'App',

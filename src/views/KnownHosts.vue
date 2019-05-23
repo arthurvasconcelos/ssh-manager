@@ -11,9 +11,10 @@
 </template>
 
 <script lang="ts">
-  import { PATH_TO_KNOWN_HOSTS_FILE, PATH_TO_SSH_FOLDER } from "@/constants";
-  import { Component, Vue } from "vue-property-decorator";
+  import getPaths from '@/helpers/get-paths';
+  import electron from 'electron';
   import fs from 'fs';
+  import { Component, Vue } from 'vue-property-decorator';
 
   interface IKnownHosts {
     domain: string;
@@ -23,14 +24,15 @@
 
   @Component({})
   export default class KnownHosts extends Vue {
+    private paths = getPaths(electron);
     public sshFolderNotFound = false;
     public hosts: IKnownHosts[] = [];
 
     public mounted() {
-      this.sshFolderNotFound = !fs.existsSync(PATH_TO_SSH_FOLDER);
+      this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
 
       if (!this.sshFolderNotFound) {
-        this.hosts = fs.readFileSync(PATH_TO_KNOWN_HOSTS_FILE)
+        this.hosts = fs.readFileSync(this.paths.knownHostsFile)
                        .toString()
                        .split('\n')
                        .filter((h) => h)
@@ -42,7 +44,7 @@
                            domain: (domainAndIp.length > 1) ? domainAndIp[0] : '--',
                            ip: (domainAndIp.length > 1) ? domainAndIp[1] : domainAndIp[0],
                            key: hostAndKey[1],
-                         }
+                         };
                        });
       }
     }

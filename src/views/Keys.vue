@@ -1,137 +1,138 @@
 <template>
-    <div class="keys">
-        <h1 class="display-3">Keys</h1>
+  <div class="keys">
+    <h1 class="display-3">Keys</h1>
 
-        <v-divider></v-divider>
+    <v-divider></v-divider>
 
-        <v-data-table
-                :headers="headers"
-                :items="keysDetails"
-                class="elevation-1 mt-5"
-                item-key="name"
-        >
-            <template slot="headerCell" slot-scope="props">
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                        <span v-on="on">{{ props.header.text }}</span>
-                    </template>
-                    <span>{{ props.header.fullText }}</span>
-                </v-tooltip>
+    <v-data-table
+      :headers="headers"
+      :items="keysDetails"
+      class="elevation-1 mt-5"
+      item-key="name"
+    >
+      <template slot="headerCell" slot-scope="props">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <span v-on="on">{{ props.header.text }}</span>
+          </template>
+          <span>{{ props.header.fullText }}</span>
+        </v-tooltip>
+      </template>
+
+      <template v-slot:no-data>
+        <v-alert :value="true" color="error" icon="warning">
+          Sorry, nothing to display here :(
+        </v-alert>
+      </template>
+
+      <template v-slot:items="props">
+        <td>{{ props.item.name }}</td>
+        <td>
+          <v-edit-dialog
+            :return-value.sync="props.item.mode"
+            large
+            lazy
+            persistent
+            @save="saveMode(props.item.name, props.item.mode)"
+            @cancel="cancelModeEdit"
+            @open="openModeEdtionModal"
+            @close="closeModeEditionModal"
+          >
+            <div>{{ props.item.mode }}</div>
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.mode"
+                :rules="[need5chars]"
+                label="Edit"
+                single-line
+                counter
+                autofocus
+              ></v-text-field>
             </template>
-
-            <template v-slot:no-data>
-                <v-alert :value="true" color="error" icon="warning">
-                    Sorry, nothing to display here :(
-                </v-alert>
+          </v-edit-dialog>
+        </td>
+        <td>{{ props.item.uid }}</td>
+        <td>{{ props.item.gid }}</td>
+        <td>{{ props.item.size }}</td>
+        <td>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <span v-on="on">{{ props.item.atime.toDateString() }}</span>
             </template>
-
-            <template v-slot:items="props">
-                <td>{{ props.item.name }}</td>
-                <td>
-                    <v-edit-dialog
-                            :return-value.sync="props.item.mode"
-                            large
-                            lazy
-                            persistent
-                            @save="saveMode(props.item.name, props.item.mode)"
-                            @cancel="cancelModeEdit"
-                            @open="openModeEdtionModal"
-                            @close="closeModeEditionModal"
-                    >
-                        <div>{{ props.item.mode }}</div>
-                        <template v-slot:input>
-                            <v-text-field
-                                    v-model="props.item.mode"
-                                    :rules="[need5chars]"
-                                    label="Edit"
-                                    single-line
-                                    counter
-                                    autofocus
-                            ></v-text-field>
-                        </template>
-                    </v-edit-dialog>
-                </td>
-                <td>{{ props.item.uid }}</td>
-                <td>{{ props.item.gid }}</td>
-                <td>{{ props.item.size }}</td>
-                <td>
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <span v-on="on">{{ props.item.atime.toDateString() }}</span>
-                        </template>
-                        <span>{{ props.item.atime }}</span>
-                    </v-tooltip>
-                </td>
-                <td>
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <span v-on="on">{{ props.item.mtime.toDateString() }}</span>
-                        </template>
-                        <span>{{ props.item.mtime }}</span>
-                    </v-tooltip>
-                </td>
-                <td>
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <span v-on="on">{{ props.item.ctime.toDateString() }}</span>
-                        </template>
-                        <span>{{ props.item.ctime }}</span>
-                    </v-tooltip>
-                </td>
-                <td>
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <span v-on="on">{{ props.item.birthtime.toDateString() }}</span>
-                        </template>
-                        <span>{{ props.item.birthtime }}</span>
-                    </v-tooltip>
-                </td>
-                <td class="justify-center layout px-0">
-                    <v-icon small class="mr-2" @click="seeFileContent(props.item.name)">visibility</v-icon>
-                </td>
+            <span>{{ props.item.atime }}</span>
+          </v-tooltip>
+        </td>
+        <td>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <span v-on="on">{{ props.item.mtime.toDateString() }}</span>
             </template>
-        </v-data-table>
+            <span>{{ props.item.mtime }}</span>
+          </v-tooltip>
+        </td>
+        <td>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <span v-on="on">{{ props.item.ctime.toDateString() }}</span>
+            </template>
+            <span>{{ props.item.ctime }}</span>
+          </v-tooltip>
+        </td>
+        <td>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <span v-on="on">{{ props.item.birthtime.toDateString() }}</span>
+            </template>
+            <span>{{ props.item.birthtime }}</span>
+          </v-tooltip>
+        </td>
+        <td class="justify-center layout px-0">
+          <v-icon small class="mr-2" @click="seeFileContent(props.item.name)">visibility</v-icon>
+        </td>
+      </template>
+    </v-data-table>
 
-        <v-dialog v-model="dialog" max-width="570px">
-            <v-card>
-                <v-card-title>
-                    <span class="headline">{{ dialogTitle }}</span>
-                </v-card-title>
+    <v-dialog v-model="dialog" max-width="570px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ dialogTitle }}</span>
+        </v-card-title>
 
-                <v-card-text>
-                    <pre v-if="dialogPre">{{ dialogText }}</pre>
-                    <span style="word-wrap: break-word" v-else>{{ dialogText }}</span>
-                </v-card-text>
+        <v-card-text>
+          <pre v-if="dialogPre">{{ dialogText }}</pre>
+          <span style="word-wrap: break-word" v-else>{{ dialogText }}</span>
+        </v-card-text>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-tooltip v-model="showCopyTooltip" top>
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="blue darken-1" flat @click="copyToClipBoard">Copy</v-btn>
-                        </template>
-                        <span>Copied to clipboard</span>
-                    </v-tooltip>
-                    <v-btn color="blue darken-1" flat @click="closeDialog">Close</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-tooltip v-model="showCopyTooltip" top>
+            <template v-slot:activator="{ on }">
+              <v-btn color="blue darken-1" flat @click="copyToClipBoard">Copy</v-btn>
+            </template>
+            <span>Copied to clipboard</span>
+          </v-tooltip>
+          <v-btn color="blue darken-1" flat @click="closeDialog">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-            {{ snackText }}
-            <v-btn flat @click="snack = false">Close</v-btn>
-        </v-snackbar>
-    </div>
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+      {{ snackText }}
+      <v-btn flat @click="snack = false">Close</v-btn>
+    </v-snackbar>
+  </div>
 </template>
 
 <script lang="ts">
-  import { PATH_TO_SSH_FOLDER } from '@/constants';
-  import { Component, Vue } from 'vue-property-decorator';
+  import getPaths from '@/helpers/get-paths';
+  import electron, { clipboard } from 'electron';
   import fs from 'fs';
   import path from 'path';
-  import { clipboard } from 'electron';
+  import { Component, Vue } from 'vue-property-decorator';
 
   @Component({})
   export default class Keys extends Vue {
+    private paths = getPaths(electron);
     public sshFolderNotFound = false;
     public sshKeys: string[] = [];
     public headers = [
@@ -144,7 +145,7 @@
       { text: 'LM', fullText: 'Last Modified', value: 'mtime' },
       { text: 'LC', fullText: 'Last Change', value: 'ctime' },
       { text: 'CA', fullText: 'Created At', value: 'birthtime' },
-      { text: 'Actions', fullText: 'Actions', value: 'name', sortable: false }
+      { text: 'Actions', fullText: 'Actions', value: 'name', sortable: false },
     ];
     public dialog = false;
     public dialogTitle = '';
@@ -159,18 +160,18 @@
     get keysDetails() {
       return this.sshKeys.map((k) => ({
         name: k,
-        ...fs.statSync(path.resolve(PATH_TO_SSH_FOLDER, k))
+        ...fs.statSync(path.resolve(this.paths.sshFolder, k)),
       }));
     }
 
     private fecthSshKeys() {
-      this.sshKeys = fs.readdirSync(PATH_TO_SSH_FOLDER)
+      this.sshKeys = fs.readdirSync(this.paths.sshFolder)
                        .filter((file) => file.endsWith('.pub'))
                        .flatMap((k) => [ k.replace('.pub', ''), k ]);
     }
 
     public mounted() {
-      this.sshFolderNotFound = !fs.existsSync(PATH_TO_SSH_FOLDER);
+      this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
 
       if (!this.sshFolderNotFound) {
         this.fecthSshKeys();
@@ -179,7 +180,7 @@
 
     public seeFileContent(fileName: string) {
       this.dialogTitle = fileName;
-      this.dialogText = fs.readFileSync(path.resolve(PATH_TO_SSH_FOLDER, fileName)).toString();
+      this.dialogText = fs.readFileSync(path.resolve(this.paths.sshFolder, fileName)).toString();
       this.dialogPre = !fileName.endsWith('.pub');
       this.dialog = true;
     }
@@ -201,7 +202,7 @@
       this.snackColor = 'success';
       this.snackText = 'Data saved';
 
-      fs.chmodSync(path.resolve(PATH_TO_SSH_FOLDER, fileName), newMode.substring(2));
+      fs.chmodSync(path.resolve(this.paths.sshFolder, fileName), newMode.substring(2));
       this.fecthSshKeys();
     }
 

@@ -1,12 +1,18 @@
-import { shallowMount } from '@vue/test-utils';
-import HelloWorld from '@/components/HelloWorld.vue';
+// import { shallowMount, mount } from '@vue/test-utils';
+// import CodeEditor from '@/components/CodeEditor.vue';
+//
+// describe('CodeEditor.vue', () => {
+//   it('renders props.value when passed', () => {
+//     const value = 'const example = () => {}';
+//     const wrapper = mount(CodeEditor, {
+//       propsData: { value },
+//     });
+//     expect(wrapper.vm.$data.code).toMatch(value);
+//   });
+// });
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message';
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
-    });
-    expect(wrapper.text()).toMatch(msg);
+describe('Mock', () => {
+  it('Mock It', () => {
+    expect('true').toMatch('true');
   });
 });

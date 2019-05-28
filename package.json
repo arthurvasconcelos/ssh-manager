@@ -21,6 +21,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "codemirror": "^5.47.0",
     "core-js": "^2.6.5",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
@@ -31,6 +32,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/codemirror": "0.0.74",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-e2e-nightwatch": "^3.7.0",

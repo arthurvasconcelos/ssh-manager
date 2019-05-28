@@ -64,35 +64,35 @@
 </template>
 
 <script lang="ts">
-  import getPaths from '@/helpers/get-paths';
-  import electron from 'electron';
-  import fs from 'fs';
-  import { Component, Vue } from 'vue-property-decorator';
+import getPaths from '@/helpers/get-paths';
+import electron from 'electron';
+import fs from 'fs';
+import { Component, Vue } from 'vue-property-decorator';
 
-  @Component({})
-  export default class Dashboard extends Vue {
-    private paths = getPaths(electron);
-    public sshFolderNotFound = false;
-    public keyCounter = 0;
-    public trustedCounter = 0;
-    public configCounter = 0;
+@Component({})
+export default class Dashboard extends Vue {
+  public sshFolderNotFound = false;
+  public keyCounter = 0;
+  public trustedCounter = 0;
+  public configCounter = 0;
+  private paths = getPaths(electron);
 
-    mounted() {
-      this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
+  public mounted() {
+    this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
 
-      if (!this.sshFolderNotFound) {
-        this.keyCounter = fs.readdirSync(this.paths.sshFolder).filter((file) => file.endsWith('.pub')).length * 2;
+    if (!this.sshFolderNotFound) {
+      this.keyCounter = fs.readdirSync(this.paths.sshFolder).filter((file) => file.endsWith('.pub')).length * 2;
 
-        if (fs.existsSync(this.paths.knownHostsFile)) {
-          this.trustedCounter = fs.readFileSync(this.paths.knownHostsFile).toString().split('\n').filter((line) => line).length;
-        }
+      if (fs.existsSync(this.paths.knownHostsFile)) {
+        this.trustedCounter = fs.readFileSync(this.paths.knownHostsFile).toString().split('\n').filter((line) => line).length;
+      }
 
-        if (fs.existsSync(this.paths.configFile)) {
-          this.configCounter = fs.readFileSync(this.paths.configFile).toString().split('\n').filter((line) => line.startsWith('Host')).length;
-        }
+      if (fs.existsSync(this.paths.configFile)) {
+        this.configCounter = fs.readFileSync(this.paths.configFile).toString().split('\n').filter((line) => line.startsWith('Host')).length;
       }
     }
   }
+}
 </script>
 
 <style lang="scss">

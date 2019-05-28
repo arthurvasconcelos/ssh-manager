@@ -1,4 +1,5 @@
-const { testWithSpectron } = require('vue-cli-plugin-electron-builder');
+import { testWithSpectron } from 'vue-cli-plugin-electron-builder';
+
 jest.setTimeout(50000);
 
 test('Window Loads Properly', async () => {
@@ -18,11 +19,7 @@ test('Window Loads Properly', async () => {
   expect(width).toBeGreaterThan(0);
   expect(height).toBeGreaterThan(0);
   // App is loaded properly
-  expect(
-    /Welcome to Your Vue\.js (\+ TypeScript )?App/.test(
-      await client.getHTML('#app')
-    )
-  ).toBe(true);
-
-  await stopServe()
+  // @ts-ignore
+  expect(/Dashboard/.test(await client.getText('.display-3'))).toBe(true);
+  await stopServe();
 });

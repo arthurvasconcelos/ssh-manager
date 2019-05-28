@@ -124,102 +124,102 @@
 </template>
 
 <script lang="ts">
-  import getPaths from '@/helpers/get-paths';
-  import electron, { clipboard } from 'electron';
-  import fs from 'fs';
-  import path from 'path';
-  import { Component, Vue } from 'vue-property-decorator';
+import getPaths from '@/helpers/get-paths';
+import electron, { clipboard } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import { Component, Vue } from 'vue-property-decorator';
 
-  @Component({})
-  export default class Keys extends Vue {
-    private paths = getPaths(electron);
-    public sshFolderNotFound = false;
-    public sshKeys: string[] = [];
-    public headers = [
-      { text: 'Name', fullText: 'Name', value: 'name' },
-      { text: 'Mode', fullText: 'Mode', value: 'mode' },
-      { text: 'User ID', fullText: 'User ID', value: 'uid' },
-      { text: 'Group ID', fullText: 'Group ID', value: 'gid' },
-      { text: 'Size', fullText: 'Size', value: 'size' },
-      { text: 'LA', fullText: 'Last Access', value: 'atime' },
-      { text: 'LM', fullText: 'Last Modified', value: 'mtime' },
-      { text: 'LC', fullText: 'Last Change', value: 'ctime' },
-      { text: 'CA', fullText: 'Created At', value: 'birthtime' },
-      { text: 'Actions', fullText: 'Actions', value: 'name', sortable: false },
-    ];
-    public dialog = false;
-    public dialogTitle = '';
-    public dialogText = '';
-    public dialogPre = false;
-    public showCopyTooltip = false;
-    public snack = false;
-    public snackColor = '';
-    public snackText = '';
-    public need5chars = (v: string) => v.length === 5 || 'Input too long!';
+@Component({})
+export default class Keys extends Vue {
 
-    get keysDetails() {
-      return this.sshKeys.map((k) => ({
-        name: k,
-        ...fs.statSync(path.resolve(this.paths.sshFolder, k)),
-      }));
-    }
+  get keysDetails() {
+    return this.sshKeys.map((k) => ({
+      name: k,
+      ...fs.statSync(path.resolve(this.paths.sshFolder, k)),
+    }));
+  }
+  public sshFolderNotFound = false;
+  public sshKeys: string[] = [];
+  public headers = [
+    { text: 'Name', fullText: 'Name', value: 'name' },
+    { text: 'Mode', fullText: 'Mode', value: 'mode' },
+    { text: 'User ID', fullText: 'User ID', value: 'uid' },
+    { text: 'Group ID', fullText: 'Group ID', value: 'gid' },
+    { text: 'Size', fullText: 'Size', value: 'size' },
+    { text: 'LA', fullText: 'Last Access', value: 'atime' },
+    { text: 'LM', fullText: 'Last Modified', value: 'mtime' },
+    { text: 'LC', fullText: 'Last Change', value: 'ctime' },
+    { text: 'CA', fullText: 'Created At', value: 'birthtime' },
+    { text: 'Actions', fullText: 'Actions', value: 'name', sortable: false },
+  ];
+  public dialog = false;
+  public dialogTitle = '';
+  public dialogText = '';
+  public dialogPre = false;
+  public showCopyTooltip = false;
+  public snack = false;
+  public snackColor = '';
+  public snackText = '';
+  private paths = getPaths(electron);
+  public need5chars = (v: string) => v.length === 5 || 'Input too long!';
 
-    private fecthSshKeys() {
-      this.sshKeys = fs.readdirSync(this.paths.sshFolder)
-                       .filter((file) => file.endsWith('.pub'))
-                       .flatMap((k) => [ k.replace('.pub', ''), k ]);
-    }
+  public mounted() {
+    this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
 
-    public mounted() {
-      this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
-
-      if (!this.sshFolderNotFound) {
-        this.fecthSshKeys();
-      }
-    }
-
-    public seeFileContent(fileName: string) {
-      this.dialogTitle = fileName;
-      this.dialogText = fs.readFileSync(path.resolve(this.paths.sshFolder, fileName)).toString();
-      this.dialogPre = !fileName.endsWith('.pub');
-      this.dialog = true;
-    }
-
-    public copyToClipBoard() {
-      clipboard.write({ text: this.dialogText }, 'rsaKey');
-      this.showCopyTooltip = true;
-      setTimeout(() => this.showCopyTooltip = false, 3000);
-    }
-
-    public closeDialog() {
-      this.dialog = false;
-      this.dialogTitle = '';
-      this.dialogText = '';
-    }
-
-    public saveMode(fileName: string, newMode: string) {
-      this.snack = true;
-      this.snackColor = 'success';
-      this.snackText = 'Data saved';
-
-      fs.chmodSync(path.resolve(this.paths.sshFolder, fileName), newMode.substring(2));
+    if (!this.sshFolderNotFound) {
       this.fecthSshKeys();
     }
-
-    public cancelModeEdit() {
-      this.snack = true;
-      this.snackColor = 'error';
-      this.snackText = 'Canceled';
-    }
-
-    public openModeEdtionModal() {
-      this.snack = true;
-      this.snackColor = 'info';
-      this.snackText = 'Dialog opened';
-    }
-
-    public closeModeEditionModal() {
-      console.log('Dialog closed');
-    }
   }
+
+  public seeFileContent(fileName: string) {
+    this.dialogTitle = fileName;
+    this.dialogText = fs.readFileSync(path.resolve(this.paths.sshFolder, fileName)).toString();
+    this.dialogPre = !fileName.endsWith('.pub');
+    this.dialog = true;
+  }
+
+  public copyToClipBoard() {
+    clipboard.write({ text: this.dialogText }, 'rsaKey');
+    this.showCopyTooltip = true;
+    setTimeout(() => this.showCopyTooltip = false, 3000);
+  }
+
+  public closeDialog() {
+    this.dialog = false;
+    this.dialogTitle = '';
+    this.dialogText = '';
+  }
+
+  public saveMode(fileName: string, newMode: string) {
+    this.snack = true;
+    this.snackColor = 'success';
+    this.snackText = 'Data saved';
+
+    fs.chmodSync(path.resolve(this.paths.sshFolder, fileName), newMode.substring(2));
+    this.fecthSshKeys();
+  }
+
+  public cancelModeEdit() {
+    this.snack = true;
+    this.snackColor = 'error';
+    this.snackText = 'Canceled';
+  }
+
+  public openModeEdtionModal() {
+    this.snack = true;
+    this.snackColor = 'info';
+    this.snackText = 'Dialog opened';
+  }
+
+  public closeModeEditionModal() {
+    console.log('Dialog closed');
+  }
+
+  private fecthSshKeys() {
+    this.sshKeys = fs.readdirSync(this.paths.sshFolder)
+                     .filter((file) => file.endsWith('.pub'))
+                     .flatMap((k) => [ k.replace('.pub', ''), k ]);
+  }
+}
 </script>

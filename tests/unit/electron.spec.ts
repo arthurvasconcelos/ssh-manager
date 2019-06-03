@@ -2,7 +2,7 @@ import { testWithSpectron } from 'vue-cli-plugin-electron-builder';
 
 jest.setTimeout(50000);
 
-test('Window Loads Properly', async () => {
+test('Window Loads Properly', async (done) => {
   // Wait for dev server to start
   const { app, stopServe } = await testWithSpectron();
   const win = app.browserWindow;
@@ -22,4 +22,5 @@ test('Window Loads Properly', async () => {
   // @ts-ignore
   expect(/Dashboard/.test(await client.getText('.display-3'))).toBe(true);
   await stopServe();
+  done();
 });

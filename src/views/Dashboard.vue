@@ -19,7 +19,7 @@
 
           <v-card-text>
             <div class="text-xs-right">
-              <p class="grey--text font-weight-light">Keys</p>
+              <p class="grey--text font-weight-light">Key Pairs</p>
               <h3 class="title display-1 font-weight-light">{{ keyCounter }}</h3>
             </div>
           </v-card-text>
@@ -64,35 +64,36 @@
 </template>
 
 <script lang="ts">
-import getPaths from '@/helpers/get-paths';
-import electron from 'electron';
-import fs from 'fs';
-import { Component, Vue } from 'vue-property-decorator';
+  import { CONFIG_FILE_NAME, KNOWN_HOSTS_FILE_NAME } from '@/constants';
+  import path from 'path';
+  import fs from 'fs';
+  import { Component, Vue } from 'vue-property-decorator';
 
-@Component({})
-export default class Dashboard extends Vue {
-  public sshFolderNotFound = false;
-  public keyCounter = 0;
-  public trustedCounter = 0;
-  public configCounter = 0;
-  private paths = getPaths(electron);
+  @Component({})
+  export default class Dashboard extends Vue {
+    public sshFolderNotFound = false;
+    public keyCounter = 0;
+    public trustedCounter = 0;
+    public configCounter = 0;
+    private knownHostsFile = path.resolve(this.$store.state.settings.sshPath, KNOWN_HOSTS_FILE_NAME);
+    private configFile = path.resolve(this.$store.state.settings.sshPath, CONFIG_FILE_NAME);
 
-  public mounted() {
-    this.sshFolderNotFound = !fs.existsSync(this.paths.sshFolder);
+    public mounted() {
+      this.sshFolderNotFound = !fs.existsSync(this.$store.state.settings.sshPath);
 
-    if (!this.sshFolderNotFound) {
-      this.keyCounter = fs.readdirSync(this.paths.sshFolder).filter((file) => file.endsWith('.pub')).length * 2;
+      if (!this.sshFolderNotFound) {
+        this.keyCounter = fs.readdirSync(this.$store.state.settings.sshPath).filter((file) => file.endsWith('.pub')).length;
 
-      if (fs.existsSync(this.paths.knownHostsFile)) {
-        this.trustedCounter = fs.readFileSync(this.paths.knownHostsFile).toString().split('\n').filter((line) => line).length;
-      }
+        if (fs.existsSync(this.knownHostsFile)) {
+          this.trustedCounter = fs.readFileSync(this.knownHostsFile).toString().split('\n').filter((line) => line).length;
+        }
 
-      if (fs.existsSync(this.paths.configFile)) {
-        this.configCounter = fs.readFileSync(this.paths.configFile).toString().split('\n').filter((line) => line.startsWith('Host')).length;
+        if (fs.existsSync(this.configFile)) {
+          this.configCounter = fs.readFileSync(this.configFile).toString().split('\n').filter((line) => line.startsWith('Host')).length;
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="scss">

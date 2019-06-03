@@ -44,73 +44,73 @@
 </template>
 
 <script lang="ts">
-import { MAINMENU_CLICK_ABOUT } from '@/constants';
-import defaultConfig from '@/helpers/default-config';
-import getPaths from '@/helpers/get-paths';
-import electron from 'electron';
-import { Component, Vue } from 'vue-property-decorator';
-import fs from 'fs';
+  import { MAINMENU_CLICK_ABOUT } from '@/constants';
+  import defaultConfig from '@/helpers/default-config';
+  import getPaths from '@/helpers/get-paths';
+  import electron from 'electron';
+  import { Component, Vue } from 'vue-property-decorator';
+  import fs from 'fs';
 
-@Component({})
-export default class App extends Vue {
-  public drawer: boolean = true;
-  public items = [
-    {
-      title: 'Dashboard',
-      icon: 'dashboard',
-      to: { name: 'dashboard' },
-    },
-    {
-      title: 'Keys',
-      icon: 'vpn_key',
-      to: { name: 'keys' },
-    },
-    {
-      title: 'Known Hosts',
-      icon: 'settings_input_antenna',
-      to: { name: 'known-hosts' },
-    },
-    {
-      title: 'Hosts Config',
-      icon: 'dns',
-      to: { name: 'config' },
-    },
-  ];
+  @Component({})
+  export default class App extends Vue {
+    public drawer: boolean = true;
+    public items = [
+      {
+        title: 'Dashboard',
+        icon: 'dashboard',
+        to: { name: 'dashboard' },
+      },
+      {
+        title: 'Keys',
+        icon: 'vpn_key',
+        to: { name: 'keys' },
+      },
+      {
+        title: 'Known Hosts',
+        icon: 'settings_input_antenna',
+        to: { name: 'known-hosts' },
+      },
+      {
+        title: 'Hosts Config',
+        icon: 'dns',
+        to: { name: 'config' },
+      },
+    ];
 
-  public async mounted() {
-    console.group('App Data');
-    console.log('App Name:', electron.remote.app.getName());
-    console.log('App Version:', electron.remote.app.getVersion());
-    console.log('Platform:', electron.remote.process.platform);
-    console.log('Chrome', electron.remote.process.versions.chrome);
-    console.log('Electron', electron.remote.process.versions.electron);
-    console.log('Node', electron.remote.process.versions.node);
-    console.log('V8', electron.remote.process.versions.v8);
-    console.groupEnd();
+    public async mounted() {
+      console.group('App Data');
+      console.log('App Name:', electron.remote.app.getName());
+      console.log('App Version:', electron.remote.app.getVersion());
+      console.log('Platform:', electron.remote.process.platform);
+      console.log('Chrome', electron.remote.process.versions.chrome);
+      console.log('Electron', electron.remote.process.versions.electron);
+      console.log('Node', electron.remote.process.versions.node);
+      console.log('V8', electron.remote.process.versions.v8);
+      console.groupEnd();
 
-    electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
-      console.log(event);
-      console.log(args);
-    });
+      electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
+        console.log(event);
+        console.log(args);
+      });
 
-    await this.loadConfig();
-  }
-
-  public async loadConfig() {
-    const configFile = getPaths(electron).appConfigFile;
-    let config = {};
-
-    if (fs.existsSync(configFile)) {
-      config = JSON.parse(fs.readFileSync(configFile).toString());
-    } else {
-      config = defaultConfig(electron);
+      await this.loadConfig();
     }
 
-    try {
-      await this.$store.dispatch('initSettings', config);
-    } catch(e) {
-      console.error(e);
+    public async loadConfig() {
+      const configFile = getPaths(electron).appConfigFile;
+      let config = {};
+
+      if (fs.existsSync(configFile)) {
+        config = JSON.parse(fs.readFileSync(configFile).toString());
+      } else {
+        config = defaultConfig(electron);
+      }
+
+      try {
+        await this.$store.dispatch('initSettings', config);
+      } catch(e) {
+        console.error(e);
+      }
     }
   }
-}
 </script>

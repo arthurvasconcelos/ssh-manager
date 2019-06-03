@@ -14,8 +14,8 @@
 
 <script lang="ts">
 import CodeEditor from '@/components/CodeEditor.vue';
-import getPaths from '@/helpers/get-paths';
-import electron from 'electron';
+import { CONFIG_FILE_NAME } from '@/constants';
+import path from 'path';
 import fs from 'fs';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -24,11 +24,11 @@ import { Component, Vue } from 'vue-property-decorator';
 })
 export default class Config extends Vue {
   public code = '';
-  private paths = getPaths(electron);
+  private configFile = path.resolve(this.$store.state.settings.sshPath, CONFIG_FILE_NAME);
 
   public beforeMount() {
-    if (fs.existsSync(this.paths.sshFolder) && fs.existsSync(this.paths.configFile)) {
-      this.code = fs.readFileSync(this.paths.configFile).toString();
+    if (fs.existsSync(this.$store.state.settings.sshPath) && fs.existsSync(this.configFile)) {
+      this.code = fs.readFileSync(this.configFile).toString();
     }
   }
 

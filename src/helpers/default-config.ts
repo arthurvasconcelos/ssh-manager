@@ -4,7 +4,7 @@ import { RendererInterface } from 'electron';
 
 export default function defaultConfig(electron: RendererInterface): Settings {
   return {
-    sshPath: getPaths(electron).sshFolder,
+    sshPath: getPaths(electron).defaultSSHFolder,
     theme: 'light',
   };
 }

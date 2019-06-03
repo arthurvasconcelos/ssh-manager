@@ -22,4 +22,4 @@ test('Window Loads Properly', async () => {
   // @ts-ignore
   expect(/Dashboard/.test(await client.getText('.display-3'))).toBe(true);
   await stopServe();
-}, 50000);
+}, 100000);

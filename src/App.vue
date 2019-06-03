@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="$store.state.settings.theme === 'dark'">
     <v-navigation-drawer v-model="drawer" fixed clipped app>
       <v-list class="pt-0" dense>
         <v-list-tile
@@ -49,7 +49,6 @@ import defaultConfig from '@/helpers/default-config';
 import getPaths from '@/helpers/get-paths';
 import electron from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
-import path from 'path';
 import fs from 'fs';
 
 @Component({})

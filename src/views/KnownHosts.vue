@@ -33,7 +33,18 @@ export default class KnownHosts extends Vue {
   }
 
   public onSave() {
-    console.log('file content saved');
+    try {
+      fs.writeFileSync(
+        this.knownHostsFile,
+        this.code,
+        {
+          encoding: 'utf-8'
+        }
+      );
+      console.log('file content saved');
+    } catch(e) {
+      console.error(e);
+    }
   }
 }
 </script>

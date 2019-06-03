@@ -1,6 +1,7 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, Menu, ipcMain } from 'electron';
+import { DIRECTORY_SELECTED, OPEN_DIRECTORY_DIALOG } from './constants';
+import { app, protocol, BrowserWindow, Menu, ipcMain, Event, dialog } from 'electron';
 import {
   createProtocol,
   installVueDevtools,
@@ -48,6 +49,16 @@ function createWindow() {
 
   win.on('closed', () => {
     win = null;
+  });
+
+  ipcMain.on(OPEN_DIRECTORY_DIALOG, (event: Event, args: string) => {
+    event.sender.send(
+      DIRECTORY_SELECTED,
+      dialog.showOpenDialog(win as BrowserWindow, {
+        defaultPath: args,
+        properties: ['openDirectory'],
+      }),
+    );
   });
 
   const menu = Menu.buildFromTemplate(menuTemplate(win));

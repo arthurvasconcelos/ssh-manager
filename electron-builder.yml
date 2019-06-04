@@ -1,3 +1,11 @@
 #appId: "br.com.arthurvasconcelos.${name}"
 #productName: "SSH Manager"
 copyright: "Copyright © 2019 ${author}"
+win:
+  target:
+    - nsis
+linux:
+  target:
+    - AppImage
+    - deb
+    - tar.gz

@@ -47,7 +47,7 @@
   import { MAINMENU_CLICK_ABOUT } from '@/constants';
   import defaultConfig from '@/helpers/default-config';
   import getPaths from '@/helpers/get-paths';
-  import electron from 'electron';
+  import electron, { Event } from 'electron';
   import { Component, Vue } from 'vue-property-decorator';
   import fs from 'fs';
 
@@ -88,7 +88,7 @@
       console.log('V8', electron.remote.process.versions.v8);
       console.groupEnd();
 
-      electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event, args) => {
+      electron.ipcRenderer.on(MAINMENU_CLICK_ABOUT, (event: Event, args: number[]) => {
         console.log(event);
         console.log(args);
       });

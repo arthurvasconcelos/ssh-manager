@@ -1,3 +1,23 @@
+.DS_Store
+node_modules
+/dist
+
+/tests/e2e/reports/
+selenium-debug.log
+
+# local env files
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Logs
 logs
 *.log
@@ -59,3 +79,5 @@ typings/
 
 # next.js build output
 .next
+#Electron-builder output
+/dist_electron

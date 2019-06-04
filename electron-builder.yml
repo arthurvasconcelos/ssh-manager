@@ -1,0 +1,3 @@
+#appId: "br.com.arthurvasconcelos.${name}"
+#productName: "SSH Manager"
+copyright: "Copyright © 2019 ${author}"

@@ -1,4 +1,4 @@
-import { testWithSpectron } from 'vue-cli-plugin-electron-builder';
+const { testWithSpectron } = require('vue-cli-plugin-electron-builder');
 
 // jest.setTimeout(50000);
 

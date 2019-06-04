@@ -8,6 +8,9 @@
 Master: [![Build Status](https://travis-ci.com/arthurvasconcelos/ssh-manager.svg?branch=master)](https://travis-ci.com/arthurvasconcelos/ssh-manager)
 Dev: [![Build Status](https://travis-ci.com/arthurvasconcelos/ssh-manager.svg?branch=develop)](https://travis-ci.com/arthurvasconcelos/ssh-manager)
 
+Master: [![CircleCI](https://circleci.com/gh/arthurvasconcelos/ssh-manager/tree/master.svg?style=svg&circle-token=2d3a97ff5fb4c213ce09d6da2267ea9be317654f)](https://circleci.com/gh/arthurvasconcelos/ssh-manager/tree/master)
+Dev: [![CircleCI](https://circleci.com/gh/arthurvasconcelos/ssh-manager/tree/develop.svg?style=svg&circle-token=2d3a97ff5fb4c213ce09d6da2267ea9be317654f)](https://circleci.com/gh/arthurvasconcelos/ssh-manager/tree/develop)
+
 # SSH Manager
 
-Lorem ipsum
+Fully description to come.
